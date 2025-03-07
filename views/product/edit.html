@@ -48,9 +48,10 @@
     <div class="container mt-3">
       <div class="rows d-flex justify-content-center">
         <div class="col-4">
-          <h2>Add Categories</h2>
+          <h2>Edit Product</h2>
           <hr />
-          <form action="/categories/add" method="post">
+          <form action="/product/edit" method="post">
+            <input type="hidden" name="id" value="{{ .product.Id }}" />
             <div class="mb-3">
               <label for="exampleInputPassword1" class="form-label">Name</label>
               <input
@@ -59,10 +60,42 @@
                 id="exampleInputPassword1"
                 autocomplete="off"
                 name="name"
+                value="{{ .product.Name }}"
               />
             </div>
+            <div class="mb-3">
+              <label for="exampleInputPassword1" class="form-label"
+                >Category</label
+              >
+              <select name="category_id" class="form-select">
+                {{ range .categories }}
+                <option value="{{ .Id }}">{{ .Name }}</option>
+                {{ end }}
+              </select>
+            </div>
+            <div class="mb-3">
+              <label for="exampleInputPassword1" class="form-label"
+                >Stock</label
+              >
+              <input
+                type="number"
+                class="form-control"
+                id="exampleInputPassword1"
+                autocomplete="off"
+                name="stock"
+                value="{{ .product.Stock }}"
+              />
+            </div>
+            <div class="mb-3">
+              <label for="exampleInputPassword1" class="form-label"
+                >Description</label
+              >
+              <textarea class="form-control" name="description" rows="3">
+{{ .product.Description }}</textarea
+              >
+            </div>
             <div class="float-end">
-              <a href="/categories" class="btn btn-secondary">Back</a>
+              <a href="/product" class="btn btn-secondary">Back</a>
               <button type="submit" class="btn btn-primary">Save</button>
             </div>
           </form>
