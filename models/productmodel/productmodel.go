@@ -66,3 +66,28 @@ func Create(product entities.Product)bool {
 
 	return lastInsertID > 0
 }
+
+func Update(id int, product entities.Product)bool {
+	result , err := config.DB.Exec(`
+	UPDATE products SET 
+		name = $1, 
+		stock = $2, 
+		category_id = $3,
+		description = $4,
+		updated_at = $5
+	WHERE id = $6`,
+	&product.Name, &product.Stock, &product.Category.Id, &product.Description, &product.UpdatedAt, id)
+	status, err := result.RowsAffected()
+	if err != nil {panic(err)}
+
+	return status > 0
+}
+
+func Delete(id int)error {
+	_, err := config.DB.Exec(`
+	DELETE FROM products WHERE id = $1`, id)
+	if err != nil {
+		panic(err)
+	}
+	return err
+}

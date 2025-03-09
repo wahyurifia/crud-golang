@@ -48,7 +48,7 @@
     <div class="container mt-3">
       <div class="rows d-flex justify-content-center">
         <div class="col-4">
-          <h2>Edit Product</h2>
+          <h2>Detail Product</h2>
           <hr />
           <form action="/products/edit" method="post">
             <input type="hidden" name="id" value="{{ .product.Id }}" />
@@ -61,13 +61,14 @@
                 autocomplete="off"
                 name="name"
                 value="{{ .product.Name }}"
+                disabled
               />
             </div>
             <div class="mb-3">
               <label for="exampleInputPassword1" class="form-label"
                 >Category</label
               >
-              <select name="category_id" class="form-select">
+              <select name="category_id" class="form-select" disabled>
                 {{ range .categories }}
                 <option
                   value="{{ .Id }}"
@@ -95,19 +96,24 @@
                 autocomplete="off"
                 name="stock"
                 value="{{ .product.Stock }}"
+                disabled
               />
             </div>
             <div class="mb-3">
               <label for="exampleInputPassword1" class="form-label"
                 >Description</label
               >
-              <textarea class="form-control" name="description" rows="3">
+              <textarea
+                class="form-control"
+                name="description"
+                rows="3"
+                disabled
+              >
 {{ .product.Description }}</textarea
               >
             </div>
             <div class="float-end">
               <a href="/products" class="btn btn-secondary">Back</a>
-              <button type="submit" class="btn btn-primary">Save</button>
             </div>
           </form>
         </div>

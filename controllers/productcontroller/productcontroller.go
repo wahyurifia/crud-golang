@@ -73,11 +73,66 @@ func Edit(w http.ResponseWriter, r *http.Request) {
 		if err != nil {panic(err)}
 
 		product := productmodel.GetById(id)
+		categories := categorymodel.GetAll()
 		data := map[string]any {
 			"product": product,
+			"categories": categories,
 		}
 		
 		temp.Execute(w, data)
-
 	}	
+
+	if r.Method == "POST" {
+		var product entities.Product
+		stock, err := strconv.Atoi(r.FormValue("stock"))
+		if err != nil {panic(err)}
+
+		categoryId, err := strconv.Atoi(r.FormValue("category_id"))
+		if err != nil {panic(err)}
+
+		idString := r.FormValue("id")
+		id, err := strconv.Atoi(idString)
+		if err != nil {panic(err)}
+
+		product.Name = r.FormValue("name")
+		product.Stock = stock
+		product.Category.Id = uint(categoryId)
+		product.Description = r.FormValue("description")
+		product.UpdatedAt = time.Now()
+
+		berhasil := productmodel.Update(id, product)
+		if !berhasil {
+			http.Redirect(w, r, r.Header.Get("Referer"), http.StatusSeeOther)
+		}
+		http.Redirect(w, r, "/products", http.StatusSeeOther)
+	}
+}
+
+func Detail(w http.ResponseWriter, r *http.Request) {
+	idString := r.URL.Query().Get("id")
+	id, err := strconv.Atoi(idString)
+	if err != nil {panic(err)}
+
+	categories := categorymodel.GetAll()
+	product := productmodel.GetById(id)
+	data := map[string]any {
+		"product": product,
+		"categories": categories,
+	}
+
+	temp, err := template.ParseFiles("views/product/detail.html")
+	if err != nil {panic(err)}
+
+	temp.Execute(w, data)
+}
+func Delete(w http.ResponseWriter, r *http.Request) {
+	idString := r.URL.Query().Get("id")
+	id, err := strconv.Atoi(idString)
+	if err != nil {panic(err)}
+
+	if err := productmodel.Delete(id); err != nil{
+		panic(err)
+	}
+
+	http.Redirect(w, r, "/products", http.StatusSeeOther)
 }

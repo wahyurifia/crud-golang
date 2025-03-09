@@ -85,6 +85,21 @@ func Edit(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func Detail(w http.ResponseWriter, r *http.Request) {
+	idString := r.URL.Query().Get("id")
+	id, err := strconv.Atoi(idString)
+	if err != nil {panic(err)}
+
+	category := categorymodel.GetById(id)
+	data := map[string]any {
+		"category": category,
+	}
+	temp, err := template.ParseFiles("views/category/detail.html")
+	if err != nil {panic(err)}
+	
+	temp.Execute(w, data)
+}
+
 func Delete(w http.ResponseWriter, r *http.Request) {
 	idString := r.URL.Query().Get("id")
 	id, err := strconv.Atoi(idString)

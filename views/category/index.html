@@ -61,6 +61,11 @@
           <tr>
             <td>{{ .Name }}</td>
             <td>
+              <a
+                href="/categories/detail?id={{ .Id }}"
+                class="btn btn-secondary"
+                >Detail</a
+              >
               <a href="/categories/edit?id={{ .Id }}" class="btn btn-warning"
                 >Edit</a
               >
